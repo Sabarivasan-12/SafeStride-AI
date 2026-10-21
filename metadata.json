@@ -1,0 +1,6 @@
+{
+  "name": "SafeStride AI",
+  "description": "AI-Powered Women's Safe Commute Companion — Explainable Route Readiness, Journey Guardian active check-in monitoring, and community safety intelligence.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

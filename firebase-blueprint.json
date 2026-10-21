@@ -1,0 +1,110 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role and preferences",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email", "maxLength": 100 },
+        "role": { "type": "string", "enum": ["user", "moderator"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "email", "role", "createdAt"]
+    },
+    "TrustedContact": {
+      "title": "TrustedContact",
+      "description": "Emergency trusted contact for commute guardian alerts",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "relationship": { "type": "string", "maxLength": 60 },
+        "consentStatus": { "type": "string", "enum": ["verified", "pending"] },
+        "notifyOnCheckinMissed": { "type": "boolean" },
+        "notifyOnSos": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "name", "phone", "relationship", "consentStatus", "createdAt"]
+    },
+    "SafetyFacility": {
+      "title": "SafetyFacility",
+      "description": "Verified safe havens, 24/7 pharmacies, police stations, and transit hubs",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 150 },
+        "facilityType": { "type": "string", "enum": ["police", "pharmacy_247", "transit_hub", "safe_haven"] },
+        "city": { "type": "string", "maxLength": 50 },
+        "address": { "type": "string", "maxLength": 250 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "operatingHours": { "type": "string", "maxLength": 100 },
+        "sourceName": { "type": "string", "maxLength": 150 },
+        "verificationStatus": { "type": "string", "enum": ["verified", "unverified"] },
+        "verifiedAt": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "facilityType", "city", "address", "verificationStatus", "createdAt"]
+    },
+    "Trip": {
+      "title": "Trip",
+      "description": "Monitored commuter journey",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "city": { "type": "string", "maxLength": 50 },
+        "status": { "type": "string", "enum": ["PLANNED", "ACTIVE", "CHECKIN_DUE", "ALERT_PENDING", "ALERT_SIMULATED", "COMPLETED", "CANCELLED"] },
+        "distanceMeters": { "type": "number" },
+        "durationSeconds": { "type": "number" },
+        "checkinIntervalMinutes": { "type": "number" },
+        "routeReadinessScore": { "type": "number" },
+        "startedAt": { "type": "string" },
+        "endedAt": { "type": "string" },
+        "nextCheckinDueAt": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "city", "status", "createdAt", "updatedAt"]
+    },
+    "IncidentReport": {
+      "title": "IncidentReport",
+      "description": "Community hazard or safety observation",
+      "type": "object",
+      "properties": {
+        "reporterId": { "type": "string", "maxLength": 128 },
+        "category": { "type": "string", "enum": ["LIGHTING", "SUSPICIOUS", "HAZARD", "HARASSMENT", "INFRASTRUCTURE"] },
+        "city": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "occurredAt": { "type": "string" },
+        "reviewStatus": { "type": "string", "enum": ["UNDER_REVIEW", "APPROVED", "REJECTED"] },
+        "sourceType": { "type": "string", "enum": ["COMMUNITY", "OFFICIAL_FEED"] },
+        "moderationNotes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["reporterId", "category", "city", "description", "reviewStatus", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "#/entities/User",
+      "description": "User profile records"
+    },
+    "/trustedContacts/{contactId}": {
+      "schema": "#/entities/TrustedContact",
+      "description": "Emergency contacts"
+    },
+    "/safetyFacilities/{facilityId}": {
+      "schema": "#/entities/SafetyFacility",
+      "description": "Public verified support havens"
+    },
+    "/trips/{tripId}": {
+      "schema": "#/entities/Trip",
+      "description": "Commuter trips"
+    },
+    "/incidentReports/{reportId}": {
+      "schema": "#/entities/IncidentReport",
+      "description": "Community reports"
+    }
+  }
+}
